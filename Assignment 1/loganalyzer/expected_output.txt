@@ -1,0 +1,60 @@
+Parsed 25 lines from the log file
+# The average object size is: 51112.76
+# The most frequent ip is: 189.27.174.190
+# The resources visted are:
+/cars/count?color=red&year=2005
+/cars/count?color=yellow
+/cars/count?color=yellow
+/cars/count?color=yellow
+/cars/count?color=yellow
+/cars/count?color=yellow
+/cars/search?color=orange&year=2010
+/cars/search?color=orange&year=2010
+/cars/search?year=1999
+/cars/search?year=1999
+/houses?color=blue
+/houses?color=green&year=2010
+/houses?color=green&year=2010
+/houses?year=1999
+/houses?year=1999&color=blue
+/houses?year=2005&color=yellow
+/houses?year=2005&color=yellow
+/tables?color=green
+/tables?color=red
+/tables?color=red
+/tables?color=red
+/tables?color=red
+/tables?year=2005
+/tables?year=2011
+/tables?year=2011
+# The distinct resources visted are:
+/cars/count?color=red&year=2005
+/cars/count?color=yellow
+/cars/search?color=orange&year=2010
+/cars/search?year=1999
+/houses?color=blue
+/houses?color=green&year=2010
+/houses?year=1999
+/houses?year=1999&color=blue
+/houses?year=2005&color=yellow
+/tables?color=green
+/tables?color=red
+/tables?year=2005
+/tables?year=2011
+# 3 successfully loaded got the requested resource
+# 2 got resource not found
+# 6 requests during the timeframe
+# Resources with color=red:
+/cars/count?color=red&year=2005
+/tables?color=red
+/tables?color=red
+/tables?color=red
+/tables?color=red
+# Resources with year=2005:
+/cars/count?color=red&year=2005
+/houses?year=2005&color=yellow
+/houses?year=2005&color=yellow
+/tables?year=2005
+# Resources with year=2010 and color=orange:
+/cars/search?color=orange&year=2010
+/cars/search?color=orange&year=2010

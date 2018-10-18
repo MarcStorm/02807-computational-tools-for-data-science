@@ -1,0 +1,22 @@
+A 0 green
+A 0 blue
+A 0 red
+A 0 green
+A 0 orange
+A 0 red
+A 0 blue
+A 0 blue
+A 0 blue
+C 0 4
+A 1 orange
+A 1 yellow
+A 1 yellow
+A 1 brown
+A 1 blue
+A 1 purple
+A 1 rainbow
+A 1 red
+A 1 purple
+C 1 7
+M 0 1 2
+C 2 8

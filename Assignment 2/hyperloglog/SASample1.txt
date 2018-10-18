@@ -1,0 +1,14 @@
+AS 5 Red
+AS 2 Blue Car
+AS 3 Old Book
+AS 5 Old Red
+AS 5 Old
+AS 1 Expensive
+AS 6 Blue Red Cheap
+AS 2 Old American
+TS 5
+SWA Old 3
+SWAOTA Old Blue 4
+SWBA Blue American 1
+SWAE Old American 2
+SWAOA Red Blue Old 4
