@@ -3,11 +3,9 @@ import math
 
 class HyperLogLog:
 
-
-
 	# Phase 0
-	def __init__(self):
-		self.p = 10
+	def __init__(self, p = 10):
+		self.p = p
 		self.m = 2**self.p
 		self.M = [0] * self.m
 		self.a16 = 0.673
@@ -68,7 +66,6 @@ class HyperLogLog:
 	# Should return an estimate of the current number of (distinct) elements in the set.
 	def count(self):
 		E = self.rawEstimate()
-		#print("E = " + str(E))
 
 		if E <= 5/2 * self.m:
 			V = self.getV()
@@ -85,10 +82,15 @@ class HyperLogLog:
 	# Should return a new hyperloglog that corresponds to the union(merge)
 	# of self and other.
 	def __add__(self, other):
-		# Assuming that self.M and other.M has the same length.
-		hllUnion = [max(self.M[x], other.M[x]) for x in range(len(self.M))]
-
 		hll = HyperLogLog()
-		hll.M = hllUnion
+		# Assuming that self.M and other.M has the same length.
+		hll.M = [max(self.M[x], other.M[x]) for x in range(len(self.M))]
+
+		return hll
+
+	def inter(self, other):
+		hll = HyperLogLog()
+		# Assuming that self.M and other.M has the same length.
+		hll.M = [min(self.M[x], other.M[x]) for x in range(len(self.M))]
 
 		return hll
