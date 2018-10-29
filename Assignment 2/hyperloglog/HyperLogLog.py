@@ -5,6 +5,7 @@ class HyperLogLog:
 
 	# Phase 0
 	def __init__(self, p = 10):
+		assert 4 <= p && p <= 16
 		self.p = p
 		self.m = 2**self.p
 		self.M = [0] * self.m
@@ -25,7 +26,7 @@ class HyperLogLog:
 		else:
 			return self.am
 
-	def trailingZeros(self, x):
+	def rho(self, x):
 		xBin = bin(x)
 		xBin = str(xBin)
 		return 1 + (len(xBin) - len(xBin.rstrip('0')))
@@ -46,7 +47,7 @@ class HyperLogLog:
 		w = x & bitStringOnes
 
 		# Update the value in M.
-		self.M[idx] = max(self.M[idx], self.trailingZeros(w))
+		self.M[idx] = max(self.M[idx], self.rho(w))
 
 
 	def rawEstimate(self):
