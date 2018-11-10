@@ -1,99 +1,86 @@
-#import matplotlib.pyplot as plt
-#import matplotlib.colors as clr
 import numpy as np
-from numpy import linalg as la
-#import numpy.linalg.norm as norm
 import os
 import sys
-import multiset as ms
-from collections import Counter
 
-
-def label(p):
-    return dict[p]
-
-''' Calculate the euclidean distance between two points. '''
+'''
+euclidean_distance will calculate the euclidean distance between two points.
+'''
 def euclidean_distance(p, q):
     dist = ((p[0]-q[0])**2 + (p[1]-q[1])**2)**0.5
     return dist
 
-def range_query(db, dist_func, q, eps):
+'''
+range_query will find all points within a range of eps of q.
+'''
+def range_query(db, q, eps):
     neighbours = set()
 
-    #q = np.asarray(q)
     for p in db:
-        # TODO: Implement support for multiple distance metrics
         dist = euclidean_distance(p, q)
         if dist <= eps:
             neighbours |= {p}
 
     return neighbours
 
+'''
+expand will expand a cluster.
+'''
 def expand(db, p, neighbours, c, eps, min_pts):
 
-    neighbours = list(neighbours)
+    while len(neighbours) > 0:
 
-    i = 0
-
-    while i < len(neighbours):
-
-        q = neighbours[i]
+        q = neighbours.pop()
 
         if db[q] == 0:
             db[q] = c
         elif db[q] is None:
             db[q] = c
-            q_neighbours = list(range_query(db, 'euclidean', q, eps))
+            q_neighbours = range_query(db, q, eps)
 
             if len(q_neighbours) >= min_pts:
-                neighbours = neighbours + q_neighbours
-
-        i += 1
-
-
-
-    '''
-    c = c + 1
-    print("C = ", c)
-
-    db[p] = c
-
-    s = neighbours - {p}
-
-    new_neighbours = set()
-
-    new_neighbours = s.copy()
-
-    for q in s:
-        if db[q] == 0:
-            db[q] = c
-        if db[q] != None:
-            continue
-        db[q] = c
-        neighbours = range_query(db, dist_func, q, eps)
-        if len(neighbours) >= min_pts:
-            new_neighbours |= neighbours
-    '''
-
+                neighbours = neighbours | q_neighbours
 
 '''
+descan will create clusters based on the DBSCAN algorithm.
 Pseudocode source: https://en.wikipedia.org/wiki/DBSCAN
 '''
-def descan_method(db, dist_func, eps, min_pts):
+def descan(db, eps, min_pts):
     c = 0
 
     for p in db:
 
-        if db[p] != None:
+        # The point has already assigned to a cluster or marked as noise.
+        if db[p] is not None:
             continue
 
-        neighbours = range_query(db, dist_func, p, eps)
+        # Find neighbours of the point.
+        neighbours = range_query(db, p, eps)
 
+        # If it doesn't have the minimum amount of neighbours, mark the point
+        # as a noise point.
         if len(neighbours) < min_pts:
             db[p] = 0 # Noise
-        else:
-            c += 1
-            expand(db, p, neighbours, c, eps, min_pts)
+            continue
+
+        c += 1
+        db[p] = c
+        s = neighbours.remove(p)
+
+        while len(neighbours) > 0:
+
+            q = neighbours.pop()
+
+            if db[q] == 0:
+                db[q] = c
+            if db[q] is not None:
+                continue
+
+            db[q] = c
+
+            q_neighbours = range_query(db, q, eps)
+
+            if len(q_neighbours) >= min_pts:
+                neighbours |= q_neighbours
 
     return db
 
@@ -139,7 +126,7 @@ file = load_file(filename)
 # Make the from the file
 n, d, db = make_db(file)
 
-db = descan_method(db, 'euclidean', eps, min_pts)
+db = descan(db, eps, min_pts)
 
 for k in db:
     print(db[k])
