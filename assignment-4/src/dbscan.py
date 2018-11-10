@@ -1,10 +1,13 @@
 #import matplotlib.pyplot as plt
 #import matplotlib.colors as clr
 import numpy as np
-from numpy import linalg as LA
+from numpy import linalg as la
 #import numpy.linalg.norm as norm
 import os
 import sys
+import multiset as ms
+from collections import Counter
+
 
 def label(p):
     return dict[p]
@@ -26,6 +29,52 @@ def range_query(db, dist_func, q, eps):
 
     return neighbours
 
+def expand(db, p, neighbours, c, eps, min_pts):
+
+    neighbours = list(neighbours)
+
+    i = 0
+
+    while i < len(neighbours):
+
+        q = neighbours[i]
+
+        if db[q] == 0:
+            db[q] = c
+        elif db[q] is None:
+            db[q] = c
+            q_neighbours = list(range_query(db, 'euclidean', q, eps))
+
+            if len(q_neighbours) >= min_pts:
+                neighbours = neighbours + q_neighbours
+
+        i += 1
+
+
+
+    '''
+    c = c + 1
+    print("C = ", c)
+
+    db[p] = c
+
+    s = neighbours - {p}
+
+    new_neighbours = set()
+
+    new_neighbours = s.copy()
+
+    for q in s:
+        if db[q] == 0:
+            db[q] = c
+        if db[q] != None:
+            continue
+        db[q] = c
+        neighbours = range_query(db, dist_func, q, eps)
+        if len(neighbours) >= min_pts:
+            new_neighbours |= neighbours
+    '''
+
 
 '''
 Pseudocode source: https://en.wikipedia.org/wiki/DBSCAN
@@ -42,34 +91,18 @@ def descan_method(db, dist_func, eps, min_pts):
 
         if len(neighbours) < min_pts:
             db[p] = 0 # Noise
-            continue
+        else:
+            c += 1
+            expand(db, p, neighbours, c, eps, min_pts)
 
-        c = c + 1
-        print("C = ", c)
-
-        db[p] = c
-
-        s = neighbours - {p}
-
-        new_neighbours = set()
-
-        for q in s:
-            if db[q] == 0:
-                db[q] = c
-            if db[q] != None:
-                continue
-            db[q] = c
-            neighbours = range_query(db, dist_func, q, eps)
-            if len(neighbours) >= min_pts:
-                new_neighbours |= neighbours
-        s |= new_neighbours
     return db
+
 
 ''' load_file '''
 def load_file(filename):
 
     srcfolder = os.path.dirname(os.path.abspath(__file__))
-    datafolder = os.path.join(srcfolder, "Data")
+    datafolder = os.path.join(srcfolder, 'Data')
     filepath = os.path.join(datafolder, filename)
 
     # Load the .dat file into an object.
@@ -92,12 +125,8 @@ def make_db(file):
     file = file[1:len(file)]
 
     db = {tuple([float(e) for e in p]): None for p in file}
-    #db = {tuple(p): None for p in file}
-    #print(db)
+
     return n, d, db
-
-#scatter("./Data/cluster_100_2_2.dat")
-
 
 ''' Read three command line arguments: filename, eps and minPts.'''
 filename = str(sys.argv[1])
