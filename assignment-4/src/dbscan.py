@@ -20,25 +20,7 @@ def range_query(db, q, eps):
         if dist <= eps:
             neighbours |= {p}
 
-    return neighbours
-
-'''
-expand will expand a cluster.
-'''
-def expand(db, p, neighbours, c, eps, min_pts):
-
-    while len(neighbours) > 0:
-
-        q = neighbours.pop()
-
-        if db[q] == 0:
-            db[q] = c
-        elif db[q] is None:
-            db[q] = c
-            q_neighbours = range_query(db, q, eps)
-
-            if len(q_neighbours) >= min_pts:
-                neighbours = neighbours | q_neighbours
+    return neighbour
 
 '''
 descan will create clusters based on the DBSCAN algorithm.
@@ -98,8 +80,10 @@ def load_file(filename):
     return datfile
 
 
-''' Extract information from the file where each line in the file is following
-the format: x;y; '''
+'''
+Extract information from the file where each line in the file is following
+the format: x;y;
+'''
 def make_db(file):
     db = dict()
 
@@ -115,7 +99,9 @@ def make_db(file):
 
     return n, d, db
 
-''' Read three command line arguments: filename, eps and minPts.'''
+'''
+Read three command line arguments: filename, eps and minPts.
+'''
 filename = str(sys.argv[1])
 eps = float(sys.argv[2])
 min_pts = float(sys.argv[3])
