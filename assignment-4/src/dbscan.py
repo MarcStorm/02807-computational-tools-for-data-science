@@ -46,6 +46,8 @@ def descan(db, eps, min_pts):
 
         c += 1
         db[p] = c
+
+        # Create the seed set.
         s = neighbours.remove(p)
 
         while len(neighbours) > 0:
