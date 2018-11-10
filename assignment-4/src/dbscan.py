@@ -20,7 +20,7 @@ def range_query(db, q, eps):
         if dist <= eps:
             neighbours |= {p}
 
-    return neighbour
+    return neighbours
 
 '''
 descan will create clusters based on the DBSCAN algorithm.
